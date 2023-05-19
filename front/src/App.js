@@ -47,30 +47,27 @@ function Login(props) {
                 "https://port-0-intro-to-se-teamproj-backend-7hqac2alhil3qhz.sel4.cloudtype.app/users/login",
                 {
                   method: "post", // method :통신방법
-                  // headers: {
-                  //   // headers: API 응답에 대한 정보를 담음
-                  //   "content-type": "application/json",
-                  // },
+
                   body: formData,
                   credentials: "include",
                 }
               )
-                // .then((response) => response.body)
-                // .then((body) => {
-                //   //const reader = body.getReader();
-                //   console.log(body);
-                // });
                 .then((res) => {
                   if (res.status === 200) {
                     alert("로그인 성공");
                     props.setMode("MAIN");
+                    console.log(res.headers.get("Date"));
+                    console.log(res.headers.get("Set-Cookie"));
                     return res.json();
                   } else if (res.status === 404) {
                     alert("로그인 실패");
+                    console.log(res);
+                    return res.json();
                   }
                 })
+
                 .then((json) => {
-                  console.log(json);
+                  //console.log(json);
                 });
             }}
           />
@@ -136,34 +133,29 @@ function Signin(props) {
             type="submit"
             value="회원가입"
             onClick={() => {
-              if (pw === pw2) {
-                var formData = new FormData();
-                formData.append("id", id);
-                formData.append("password", pw);
-                fetch(
-                  "https://port-0-intro-to-se-teamproj-backend-7hqac2alhil3qhz.sel4.cloudtype.app/users/signup",
-                  {
-                    method: "post",
-                    body: formData,
-                    credentials: "include",
+              var formData = new FormData();
+              formData.append("id", id);
+              formData.append("password", pw);
+              fetch(
+                "https://port-0-intro-to-se-teamproj-backend-7hqac2alhil3qhz.sel4.cloudtype.app/users/signup",
+                {
+                  method: "post",
+                  body: formData,
+                  credentials: "include",
+                }
+              )
+                .then((res) => {
+                  if (res.status === 200) {
+                    alert("회원가입 성공");
+                    return res.json();
+                  } else if (res.status === 400) {
+                    alert("회원가입 실패");
+                    return res.json();
                   }
-                )
-                  .then((res) => {
-                    if (res.status === 200) {
-                      alert("회원가입 성공");
-                    } else if (res.status === 400) {
-                      alert("회원가입 실패");
-                      return res.json();
-                    }
-                  })
-
-                  .then((res) => res.json())
-                  .then((json) => {
-                    console.log(json);
-                  });
-              } else {
-                alert("비밀번호가 일치하지 않습니다.");
-              }
+                })
+                .then((json) => {
+                  console.log(json);
+                });
             }}
           />
         </p>
@@ -198,6 +190,7 @@ function Main(props) {
                 "https://port-0-intro-to-se-teamproj-backend-7hqac2alhil3qhz.sel4.cloudtype.app/users/logincheck",
                 {
                   method: "get",
+                  credentials: "include",
                   // headers: {
                   //   // headers: API 응답에 대한 정보를 담음
                   //   "content-type": "application/json",
@@ -228,6 +221,7 @@ function Main(props) {
                 "https://port-0-intro-to-se-teamproj-backend-7hqac2alhil3qhz.sel4.cloudtype.app/users/logout",
                 {
                   method: "get",
+                  credentials: "include",
                 }
               )
                 .then((res) => {
